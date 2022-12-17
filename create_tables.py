@@ -4,18 +4,28 @@ from sql_queries import create_table_queries, drop_table_queries
 
 
 def drop_tables(cur, conn):
+    """  
+    - Drop all tables prior to creating tables
+    """
     for query in drop_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def create_tables(cur, conn):
+    """  
+    - Run SQL queries to create tables
+    """
     for query in create_table_queries:
         cur.execute(query)
         conn.commit()
 
 
 def main():
+    """  
+    - Parse config and log into Amazon Redshift and run above two functions
+    - Close connection after finished
+    """
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
