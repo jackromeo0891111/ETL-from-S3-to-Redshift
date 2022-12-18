@@ -1,5 +1,5 @@
 # ETL-from-S3-to-Redshift
-### Introduction - The purpose of the project, What is Sparkify, how this project is going to help it.
+This project serves the purpose for an imaginary startup company "Sparkify" to fetch user data from AWS S3 and transfer to Amazon Redshift data warehouse for future analysis
 ### Database schema design and ETL process
 ### Files in repository
 ### How to run the python scripts
