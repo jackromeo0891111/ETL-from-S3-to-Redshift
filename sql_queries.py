@@ -112,8 +112,7 @@ COPY staging_events
 FROM {}
 REGION 'us-west-2'
 CREDENTIALS 'aws_iam_role={}' 
-format as json {}
-timeformat as 'epochmillisecs';
+format as json {};
 """).format(config['S3']['LOG_DATA'], config['IAM_ROLE']['ARN'], config['S3']['LOG_JSONPATH'])
 
 staging_songs_copy = ("""
@@ -154,15 +153,14 @@ FROM staging_songs
 
 time_table_insert = ("""
 INSERT INTO time (start_time, hour, day, week, month, year, weekday)
-SELECT 
-ts
-EXTRACT (HOUR FROM ts),
-EXTRACT (DAY FROM ts),
-EXTRACT (WEEK FROM ts),
-EXTRACT (MONTH FROM ts),
-EXTRACT (YEAR FROM ts),
-EXTRACT (WEEKDAY FROM ts)
-FROM staging_events
+SELECT a.start_time, 
+EXTRACT (HOUR FROM a.start_time),
+EXTRACT (DAY FROM a.start_time),
+EXTRACT (WEEK FROM a.start_time),
+EXTRACT (MONTH FROM a.start_time),
+EXTRACT (YEAR FROM a.start_time),
+EXTRACT (WEEKDAY FROM a.start_time)
+FROM (SELECT TIMESTAMP 'epoch' + start_time/1000 *INTERVAL '1 second' as start_time FROM songplays) a
 """)
 
 # QUERY LISTS
