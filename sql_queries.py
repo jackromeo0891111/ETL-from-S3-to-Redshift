@@ -56,9 +56,9 @@ year               INT)
 
 songplay_table_create = ("""
 CREATE TABLE songplays (
-songplay_id   BIGINT    IDENTITY    PRIMARY KEY,
-start_time    BIGINT    NOT NULL,
-user_id       INT       NOT NULL,
+songplay_id   BIGINT    IDENTITY,
+start_time    BIGINT,
+user_id       INT,
 level         VARCHAR,
 song_id       VARCHAR,
 artist_id     VARCHAR,
@@ -69,7 +69,7 @@ user_agent    VARCHAR)
 
 user_table_create = ("""
 CREATE TABLE users (
-user_id INT   PRIMARY KEY,
+user_id       INT,
 first_name    VARCHAR,
 last_name     VARCHAR,
 gender        VARCHAR,
@@ -78,17 +78,17 @@ level         VARCHAR)
 
 song_table_create = ("""
 CREATE TABLE songs (
-song_id    VARCHAR    PRIMARY KEY,
-title      VARCHAR    NOT NULL,
+song_id    VARCHAR,
+title      VARCHAR,
 artist_id  VARCHAR,
 year       INT,
-duration   NUMERIC NOT NULL)
+duration   NUMERIC)
 """)
 
 artist_table_create = ("""
 CREATE TABLE artists (
-artist_id    VARCHAR    PRIMARY KEY,
-name         VARCHAR    NOT NULL,
+artist_id    VARCHAR,
+name         VARCHAR,
 location     VARCHAR,
 latitude     DOUBLE PRECISION,
 longitude    DOUBLE PRECISION)
@@ -96,7 +96,7 @@ longitude    DOUBLE PRECISION)
 
 time_table_create = ("""
 CREATE TABLE time (
-start_time    TIMESTAMP    PRIMARY KEY,
+start_time    TIMESTAMP,
 hour          INT,
 day           INT,
 week          INT,
@@ -129,9 +129,8 @@ format as json 'auto';
 songplay_table_insert = ("""
 INSERT INTO songplays (start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
 SELECT se.ts, se.user_id, se.level, ss.song_id, ss.artist_id, se.session_id, se.location, se.user_agent
-FROM staging_events se,
+FROM staging_events se
 LEFT JOIN staging_songs ss ON se.song=ss.title
-ON CONFLICT DO NOTHING
 """)
 
 user_table_insert = ("""
@@ -139,22 +138,18 @@ INSERT INTO users (user_id, first_name, last_name, gender, level)
 SELECT DISTINCT user_id, first_name, last_name, gender, level
 FROM staging_events
 WHERE page='NextSong'
-ON CONFLICT (user_id)
-DO UPDATE SET level = EXCLUDED.level
 """)
 
 song_table_insert = ("""
 INSERT INTO songs (song_id, title, artist_id, year, duration)
 SELECT song_id, title, artist_id, year, duration
 FROM staging_songs
-ON CONFLICT DO NOTHING
 """)
 
 artist_table_insert = ("""
 INSERT INTO artists (artist_id, name, location, latitude, longitude)
 SELECT artist_id, artist_name, artist_location, artist_latitude, artist_longitude
 FROM staging_songs
-ON CONFLICT DO NOTHING
 """)
 
 time_table_insert = ("""
@@ -168,7 +163,6 @@ EXTRACT (MONTH FROM ts),
 EXTRACT (YEAR FROM ts),
 EXTRACT (WEEKDAY FROM ts)
 FROM staging_events
-ON CONFLICT DO NOTHING
 """)
 
 # QUERY LISTS
