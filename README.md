@@ -9,7 +9,7 @@ This project serves the purpose for an imaginary startup company "Sparkify" to f
 ![Screen Shot 2022-12-18 at 16 39 08](https://user-images.githubusercontent.com/88352138/208328128-c160277c-fb4e-4970-a3cb-cf38379bcabc.png)
 
 #### 2. ETL process    
-1. Copy files from S3 and transform, then insert into staging tabls
+1. Copy files from S3 and transform, then insert into staging tables
 2. Copy from staging tables into each final tables
 ### How to run the python scripts
 1. Edit dwh.cfg. Fill in Amazon Redshift info, IAM role and S3 file path
